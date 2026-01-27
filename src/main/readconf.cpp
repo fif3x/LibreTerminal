@@ -29,6 +29,8 @@ void readconf::read_config()
 {
     os OS;
     OS = detect_os();
+    
+    Log::log("Detected OS", true);
 
     fs::path path = { };
 
@@ -37,16 +39,19 @@ void readconf::read_config()
 
     if (minimum)
     {
+        Log::log("Minimum boolean set to true", true);
         return;
     }
 
     if (OS == lnx)
     {
         path = fs::path(std::getenv("HOME")) / ".config/libreterminal/config.conf";
+        Log::log("Linux Detected on configuration", false);
     }
     else if (OS == win)
     {
         path = fs::path("C:\\LibreTerminal\\config.conf");
+        Log::log("Windows Detected on configuration", false);
     }
     else
     {
@@ -56,36 +61,27 @@ void readconf::read_config()
         exit(error_code);
     }
 
+    std::cout << path;
     std::fstream config_f(path);
 
-    std::string text;
+    std::string text = { };
     
     if (fs::exists(path))
     {
-
-        if (close_conf_before_reading)
-        {
-            config_f.close();
+        Log::log("Path exists", true);
+        
+        if(!config_f){
+            std::cout << "test-error\n";
         }
-
-        if (config_f.is_open())
-        {
-            error_code = 4;
-            status_code = 1;
-            Log::log("ERROR 004 - CANNOT CONTINUE\n", true);
-            exit(error_code);
-        }
-
+        
+        Log::log("About to read from configuration", false);
+        
+            
         while (std::getline(config_f, text))
         {
-            if (is_comment(text)){
-                
-            } else {
-                std::cout << "test";
-            }
+           Log::log(text, false); 
         }
-
-        config_f.close();
+        Log::log("Stopped reading from configuration", false);
     }
     else
     {

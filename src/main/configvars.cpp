@@ -21,4 +21,4 @@ bool config::full_name_OS = false;
 // --- plugins configs ---
 bool config::apply_plugins = false;
 
-// --- custom configs --- (for custom builds of the program)
+// --- custom configs --- (for custom builds of the program - make sure to sync include/main/configvars.h)
