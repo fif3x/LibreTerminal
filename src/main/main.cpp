@@ -26,8 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 NOTE: If you experience any errros, please contact the developers on the following platforms:
 
-@fif3x_ on Discord (preffered way)
 @fifex._ on Instagram
+t.me/fif3x for Telegram
 
 E-MAIL: fif3x@disroot.org     NOTE: might not respond quickly, also this e-mail might change
 
@@ -44,12 +44,20 @@ E-MAIL: fif3x@disroot.org     NOTE: might not respond quickly, also this e-mail 
 int main()
 {
     
-    os OS;
     
-    config::read_config(); // from readconf.h
+    readconf::read_config(); // from readconf.h
 
+    os OS;
+    OS = detect_os();
+    
+    if(OS == lnx){
+        
+    }
+    
     while (true)
     {
+        bool log = false;
+        
         print_os(); // from os.h
 
         std::getline(std::cin, input); // capture full line, this helps so we can check if the line is empty.
@@ -64,14 +72,19 @@ int main()
         {
             status_code = 0;
             error_code = 0;
+            log = true;
+            
             // get help
         }
         else if (input.empty() || input == " " || input == "\n")
         { // so it doesnt look buggy
+        
         }
 
         else if (input == "clear" || input == "cls" || input == "Clear" || input == "CLS" || input == "CLEAR")
-        { // clear screen
+        { 
+            log = true;
+            // clear screen
             if (OS == win)
             {
                 error_code = 0;
@@ -89,9 +102,29 @@ int main()
             }
         }
         else if (input == "logs" || input == "Logs" || input == "LOGS"){
+            log = true;
+            error_code = 0;
+            status_code = 0;
             for(int index = 0; index < Log::logs.size(); index++){
                 std::cout << Log::logs.at(index) << "\n";
             }
+        }
+        else if (input == "show_os" || input == "showos"){
+            log = true;
+            error_code = true;
+            status_code = true;
+            
+            std::string os = { };
+            
+            if(OS == lnx){
+                os = "Linux";
+            } else if (OS == win){
+                os = "Windows";
+            } else if (OS == unk){
+                os = "Unknown";
+            }
+            
+            std::cout << "Detected: " << os << " | Code: " << OS << std::endl;
         }
         else
         {
@@ -99,6 +132,10 @@ int main()
             status_code = 1;
             std::cout << "ERROR 002" << std::endl;
         }
+        
+        if (log){
+            Log::log(input, false);
+        }    
     }
 
     // i use fedora btw

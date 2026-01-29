@@ -9,39 +9,47 @@ With the cut of cross-platform incompatabilities we mean stopping the difference
 
 [![GitHub Repo](https://img.shields.io/badge/github-repo-blue?logo=github)](https://github.com/fif3x/Libre-Terminal)
 
+# Dependencies
+
+You will need the following packages for this to work: `g++`, `make`
+
+For Linux users, you can check the `dependencies.sh` file in `build/`. For Windows users, please download GCC through MinGW and make through MSYS2 which can be downloaded through winget: `winget install MSYS2.MSYS2` and then on MSYS2 run: `pacman -S make`
+
 # Installation
 
 **NOTE: instead of building the binary yourself, you can also download it through the releases**
 
+*Note: its heavily discouraged, but if you don't want to download it manually, please run the following command (ONLY FOR LINUX)*
+```bash
+curl https://raw.githubusercontent.com/fif3x/LibreTerminal/refs/heads/main/build/autobuild.sh | bash
+```
+
 1. Install the repo, you can either do this with Git, the GitHub GUI or GitHub CLI. It's strongly recommended to install it through Git, using this command:
 ```bash
-git clone https://github.com/fif3x/Libre-Terminal.git
+git clone https://github.com/fif3x/LibreTerminal.git
 ```
 
-2. Create the configuration file location needed. For Linux users, just run this:
-```bash
-mkdir -p ~/.config/libreterminal && cd ~/.config/libreterminal && touch config.conf
-```
-and for Windows users, create a file named `config.conf` under the location `C:\\LibreTerminal`
+2. If you are a Linux/MacOS user skip this. For Windows users, copy the file named `config.conf` from the repository folder under the 'etc' subfolder to the location `C:\\LibreTerminal`
 
-3. **C**hange **D**irectory to `build/` and run the file needed for your OS.
+3. Now change directory to the build folder, make the script executable (if needed) and run it
 For Windows:
 ```bat
+cd build
 build
 ```
 For Linux:
 ```bash
+cd build
+chmod +x *
 ./build.sh
 ```
 
 4. If it has been compiled succesfully, your program should be located in either `bin/linux` or `bin/win`
 
-
 # Licensing
 Free and Open Source Software (FOSS) program.
 Licensed under the GNU GPL v3 license.
 No warranty.
-
 
 # Contact
 For any questions, suggestions, ideas or problems, please contact me on one of the following platforms:

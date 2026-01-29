@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace config{
+namespace readconf {
     extern bool is_comment(std::string str);
     extern void read_config();
 }

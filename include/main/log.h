@@ -6,7 +6,7 @@
 
 namespace Log{
     extern std::vector<std::string> logs;
-    extern inline void log(std::string message, bool print);
+    extern void log(std::string message, bool print);
 }
 
 #endif

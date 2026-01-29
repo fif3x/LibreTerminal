@@ -6,7 +6,7 @@
 void Log::log(std::string message, bool print){
     Log::logs.push_back(message);
     if(print){
-        std::cout << message << "\n";
+        std::cout << "[LOG] " << message << "\n";
     } 
 }
 
