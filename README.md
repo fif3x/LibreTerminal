@@ -20,8 +20,8 @@ For Linux users, you can check the `dependencies.sh` file in `build/`. For Windo
 **NOTE: instead of building the binary yourself, you can also download it through the releases**
 
 *Note: its heavily discouraged, but if you don't want to download it manually, please run the following command (ONLY FOR LINUX)*
-```
-sh -c "$(curl -sS https://github.com/fif3x/LibreTerminal/build/autobuild.sh)"
+```bash
+curl https://raw.githubusercontent.com/fif3x/LibreTerminal/refs/heads/main/build/autobuild.sh | bash
 ```
 
 1. Install the repo, you can either do this with Git, the GitHub GUI or GitHub CLI. It's strongly recommended to install it through Git, using this command:
