@@ -17,13 +17,15 @@ bool readconf::is_comment(std::string str)
 {
     if (str.find(";") != std::string::npos) // does not have the comment line
     {
-        return false;
+        return true;
     }
     else
     {
-        return true;
+        return false;
     }
 }
+
+std::vector<std::string> readconf::configs = { };
 
 void readconf::read_config()
 {
@@ -74,13 +76,19 @@ void readconf::read_config()
             std::cout << "test-error\n";
         }
         
-        Log::log("About to read from configuration", false);
-        
-            
         while (std::getline(config_f, text))
         {
-           Log::log(text, false); 
+            if(!is_comment(text)){
+                readconf::configs.push_back(text);
+            }
         }
+        
+        Log::log("About to read from configuration", false);
+            
+        for(int index = 0; index < readconf::configs.size(); index++){
+            Log::log(readconf::configs.at(index), false);
+        }
+        
         Log::log("Stopped reading from configuration", false);
     }
     else
