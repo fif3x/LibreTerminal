@@ -3,6 +3,7 @@
 #include <cstdint>
 
 std::string input = {};
+std::string arg1 = {};
 bool minimum = false;
 bool close_conf_before_reading = true;
 

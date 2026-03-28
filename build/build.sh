@@ -1,6 +1,8 @@
 #!/bin/bash
 cd ..
+echo "----------"
 make
+echo "----------"
 mkdir -p bin
 mv libreterminal bin
 make clean

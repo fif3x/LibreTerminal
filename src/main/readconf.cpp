@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <filesystem>
+#include <map>
 
 #include "../../include/main/readconf.h"
 #include "../../include/main/vars.h"
@@ -15,7 +16,7 @@ namespace fs = std::filesystem;
 
 bool readconf::is_comment(std::string str)
 {
-    if (str.find(";") != std::string::npos) // does not have the comment line
+    if (str.find("#") != std::string::npos) // does not have the comment line
     {
         return true;
     }
@@ -44,7 +45,7 @@ void readconf::read_config()
         Log::log("Minimum boolean set to true", true);
         return;
     }
-
+ 
     if (OS == lnx)
     {
         path = fs::path(std::getenv("HOME")) / ".config/libreterminal/config.conf";
@@ -75,11 +76,64 @@ void readconf::read_config()
         if(!config_f){
             std::cout << "test-error\n";
         }
-        
+
         while (std::getline(config_f, text))
         {
-            if(!is_comment(text)){
+            if(!is_comment(text) && !(text.empty())){
                 readconf::configs.push_back(text);
+            }
+        }
+        
+        for (int index = 0; index < readconf::configs.size(); index++){
+            auto it = readconf::configs.at(index).find('=');
+            std::string key = { };
+            std::string value = { };
+
+
+            if (it != std::string::npos) {
+                key = readconf::configs.at(index).substr(0, it);
+                value = readconf::configs.at(index).substr(it + 1);
+            }
+
+            if(key == "shell"){
+                config::shell = value;
+            } 
+            else if (key == "debug_mode"){
+                if(value_true){
+                    config::debug_mode = true;
+                }
+            } else if (key == "show_mem"){
+                if(value_true){
+                    config::show_mem = true;
+                }
+            } else if (key == "unknown_os_allowed"){
+                if(value_true){
+                    config::unknown_os_allowed = true;
+                }
+            } else if (key == "win_always"){
+                if(value_true){
+                    config::win_always = true;
+                }
+            } else if (key == "linux_always"){
+                if(value_true){
+                    config::linux_always = true;
+                }
+            } else if (key == "linux_distro"){
+                config::linux_distro = value;
+            } else if (key == "distro_not_os"){
+                if(value_true){
+                    config::distro_not_os = true;
+                }
+            } else if (key == "full_name_OS"){
+                if(value_true){
+                    config::full_name_OS = true;
+                }
+            } else if (key == "apply_plugins"){
+                if(value_true){
+                    config::apply_plugins = true;
+                }
+            } else {
+                Log::log(("Unknown Configuration Key: " + key), true);
             }
         }
         
@@ -98,4 +152,14 @@ void readconf::read_config()
         Log::log("ERROR 003 - CANNOT CONTINUE", true);
         exit(error_code);
     }
+
+    /*
+        "An idiot admires complexity, a genius admires simplicity, a physicist tries to make it
+        simple, for an idiot anything the more complicated it is the more he will admire it, if
+        you make something so clusterfucked he can't understand it he's gonna think you're a
+        god cause you made it so complicated nobody can understand it. That's how they write
+        journals in Academics, they try to make it so complicated people think you're a genius"
+
+        RIP Terry Davis, creator of TempleOS
+    */
 }

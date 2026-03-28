@@ -5,6 +5,7 @@
 #include <cstdint>
 
 extern std::string input;
+extern std::string arg1;
 extern bool minimum;
 extern bool close_conf_before_reading;
 

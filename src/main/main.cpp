@@ -36,10 +36,15 @@ E-MAIL: fif3x@disroot.org     NOTE: might not respond quickly, also this e-mail 
 #include <iostream>
 #include <cstdint>
 
+#include <string.h>
+
 #include "../../include/main/log.h"
 #include "../../include/main/os.h"
 #include "../../include/main/readconf.h"
 #include "../../include/main/vars.h"
+#include "../../include/main/configvars.h"
+
+#define LOG log = true
 
 int main()
 {
@@ -50,40 +55,88 @@ int main()
     os OS;
     OS = detect_os();
     
-    if(OS == lnx){
-        
-    }
-    
     while (true)
     {
         bool log = false;
         
+        arg1 = { }; // std::string
+        
         print_os(); // from os.h
 
-        std::getline(std::cin, input); // capture full line, this helps so we can check if the line is empty.
+        std::getline(std::cin, input); // capture full line, this helps so we can check if the line is empty
 
-        if (input == ":q" || input == "quit" || input == "exit")
+        auto it = input.find(' ');
+        if (it != std::string::npos) {
+            input = input.substr(0, it);
+            arg1 = input.substr(it + 1);
+        }
+
+        if (input == "quit" || input == "exit" || input == "Quit" || input == "Exit")
         {
+            LOG;
             status_code = 0;
             error_code = 0;
+
             break; // quit libre terminal
+        } 
+        else if (input == "exec" || input == "Exec" || input == "execute")
+        {
+            LOG;
+            status_code = 0;
+            error_code = 0;
+
+            system(arg1.c_str());
+        }
+        else if (input == "ping" || input == "Ping")
+        {
+            LOG;
+            status_code = 0;
+            error_code = 0;
+
+            system(("ping" + arg1).c_str());
+        }
+        else if (input == "show_ip")
+        {
+            LOG;
+            status_code = 0;
+            error_code = 0;
+
+            if(OS == lnx){
+                system("ifconfig");
+            } else if (OS == win){
+                system("ipconfig");
+            }
         }
         else if (input == "help" || input == "Help")
         {
+            std::cout << "LIST OF COMMANDS\n" <<
+                "1. quit | exit - exits program\n" <<
+                "2. help - shows list of commands\n" <<
+                "3. clear - clears output/screen\n" <<
+                "4. logs - shows logs\n" <<
+                "5. show_os - Shows OS being used\n" <<
+                "6. exec - executes the command given in the argument" <<
+                "7. show_ip - shows ip\n" <<
+                "8. ping - pings an ip given at [arg1]\n" <<
+                "9. show_shell - show shell detected\n" <<
+                "10. exec - executes command given at [arg1]\n" <<
+                "11. show_conf - shows configuration\n" << 
+            std::endl;
+
             status_code = 0;
             error_code = 0;
-            log = true;
+            LOG;
             
             // get help
         }
-        else if (input.empty() || input == " " || input == "\n")
+        else if (input.empty() || input.at(1) == ' ' || input == "\n")
         { // so it doesnt look buggy
         
         }
 
         else if (input == "clear" || input == "cls" || input == "Clear" || input == "CLS" || input == "CLEAR")
         { 
-            log = true;
+            LOG;
             // clear screen
             if (OS == win)
             {
@@ -99,18 +152,47 @@ int main()
             }
             else
             {
+                error_code = 0;
+                status_code = 0;
+
+                if(config::unknown_os_allowed = true){
+                    if(config::shell == "bash" || config::shell == "sh" || config::shell == "zsh" || config::shell == "fish"){
+                        system("clear");
+                    } else if (config::shell == "batch"){
+                        system("cls");
+                    }
+                } else {
+
+                }
+            }
+        } else if (input == "show_shell" || input == "show_Shell"){
+            LOG;
+            error_code = 0;
+            status_code = 0;
+
+            std::cout << config::shell << std::endl;
+
+        } else if (input == "show_conf" || input == "show_Conf" || input == "show_config" || input == "show_Config"){
+            LOG;
+            error_code = 0;
+            status_code = 0;
+
+            for(int index = 0; index < readconf::configs.size(); index++){
+                std::cout << readconf::configs.at(index) << std::endl;
             }
         }
         else if (input == "logs" || input == "Logs" || input == "LOGS"){
-            log = true;
+            LOG;
             error_code = 0;
             status_code = 0;
+
             for(int index = 0; index < Log::logs.size(); index++){
                 std::cout << Log::logs.at(index) << "\n";
             }
+
         }
         else if (input == "show_os" || input == "showos"){
-            log = true;
+            LOG;
             error_code = true;
             status_code = true;
             
@@ -130,7 +212,7 @@ int main()
         {
             error_code = 2;
             status_code = 1;
-            std::cout << "ERROR 002" << std::endl;
+            std::cerr << "ERROR 002" << std::endl;
         }
         
         if (log){
