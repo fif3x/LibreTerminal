@@ -68,7 +68,7 @@ int main()
         auto it = input.find(' ');
         if (it != std::string::npos) {
             input = input.substr(0, it);
-            arg1 = input.substr(it + 1);
+            arg1 = input.substr(it);
         }
 
         if (input == "quit" || input == "exit" || input == "Quit" || input == "Exit")
@@ -121,6 +121,7 @@ int main()
                 "9. show_shell - show shell detected\n" <<
                 "10. exec - executes command given at [arg1]\n" <<
                 "11. show_conf - shows configuration\n" << 
+                "12. echo - outputs what is given on [arg1]\n" <<
             std::endl;
 
             status_code = 0;
@@ -155,7 +156,7 @@ int main()
                 error_code = 0;
                 status_code = 0;
 
-                if(config::unknown_os_allowed = true){
+                if(config::unknown_os_allowed == true){
                     if(config::shell == "bash" || config::shell == "sh" || config::shell == "zsh" || config::shell == "fish"){
                         system("clear");
                     } else if (config::shell == "batch"){
