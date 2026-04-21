@@ -3,7 +3,8 @@
 namespace config{
     // --- general configs ---
     extern std::string shell;
-    
+    extern bool auto_exec;
+
     extern bool debug_mode;
     extern bool show_mem; // show the memory used
     

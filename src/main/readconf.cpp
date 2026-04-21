@@ -98,6 +98,11 @@ void readconf::read_config()
             if(key == "shell"){
                 config::shell = value;
             } 
+            else if (key == "auto_exec"){
+                if(value_true){
+                    config::auto_exec = true;
+                }
+            }
             else if (key == "debug_mode"){
                 if(value_true){
                     config::debug_mode = true;

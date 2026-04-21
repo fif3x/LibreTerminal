@@ -43,17 +43,48 @@ E-MAIL: fif3x@disroot.org     NOTE: might not respond quickly, also this e-mail 
 #include "../../include/main/readconf.h"
 #include "../../include/main/vars.h"
 #include "../../include/main/configvars.h"
+#include "../../include/main/pluginloader.h"
+#include "../../include/main/debug.hpp"
 
 #define LOG log = true
+#define DEBUG config::debug_mode
 
 int main()
 {
-    
+    namespace pl = pluginloader;
     
     readconf::read_config(); // from readconf.h
 
+    std::vector<std::string> plugins = { };
+
     os OS;
     OS = detect_os();
+
+
+    if(config::linux_always){
+        OS = lnx;
+    } else if (config::win_always){
+        OS = win;
+    }
+
+    if(DEBUG){
+        dbg(OS, "OS");
+    }
+
+    if(!config::unknown_os_allowed){
+        if(OS == unk){
+            std::cout << "ERROR: Unknown OS found and config rule `unknown_os_allowed` is false. Please change and rerun the program." << std::endl;
+            exit(1);
+        }
+    }
+
+
+    if(config::apply_plugins){
+        plugins = pl::locate_plugins();
+
+        pl::load_plugin_symbol(plugins, "start", {});
+
+    }
     
     while (true)
     {
@@ -61,14 +92,24 @@ int main()
         
         arg1 = { }; // std::string
         
+        pl::load_plugin_symbol(plugins, "before_prompt", {});
         print_os(); // from os.h
+        pl::load_plugin_symbol(plugins, "after_prompt", {});
 
         std::getline(std::cin, input); // capture full line, this helps so we can check if the line is empty
 
+        pl::load_plugin_symbol(plugins, "input", input.c_str());
+
+        
         auto it = input.find(' ');
         if (it != std::string::npos) {
-            input = input.substr(0, it);
             arg1 = input.substr(it);
+            input = input.substr(0, it);           
+        }
+        
+        if(DEBUG){
+            dbg(input, "input");
+            dbg(arg1, "arg1");
         }
 
         if (input == "quit" || input == "exit" || input == "Quit" || input == "Exit")
@@ -85,7 +126,11 @@ int main()
             status_code = 0;
             error_code = 0;
 
-            system(arg1.c_str());
+            if (!arg1.empty() && arg1.front() == '"' && arg1.back() == '"') {
+                arg1 = arg1.substr(1, arg1.size() - 2);
+            }
+
+            std::system((arg1).c_str());
         }
         else if (input == "ping" || input == "Ping")
         {
@@ -93,7 +138,7 @@ int main()
             status_code = 0;
             error_code = 0;
 
-            system(("ping" + arg1).c_str());
+            std::system(("ping" + arg1).c_str());
         }
         else if (input == "show_ip")
         {
@@ -102,9 +147,9 @@ int main()
             error_code = 0;
 
             if(OS == lnx){
-                system("ifconfig");
+                std::system("ifconfig");
             } else if (OS == win){
-                system("ipconfig");
+                std::system("ipconfig");
             }
         }
         else if (input == "help" || input == "Help")
@@ -115,7 +160,7 @@ int main()
                 "3. clear - clears output/screen\n" <<
                 "4. logs - shows logs\n" <<
                 "5. show_os - Shows OS being used\n" <<
-                "6. exec - executes the command given in the argument" <<
+                "6. exec - executes the command given in the argument\n" <<
                 "7. show_ip - shows ip\n" <<
                 "8. ping - pings an ip given at [arg1]\n" <<
                 "9. show_shell - show shell detected\n" <<
@@ -130,7 +175,7 @@ int main()
             
             // get help
         }
-        else if (input.empty() || input.at(1) == ' ' || input == "\n")
+        else if (input.empty() || (input.size() > 1 && input.at(1) == ' ') || input == "\n")
         { // so it doesnt look buggy
         
         }
@@ -143,13 +188,13 @@ int main()
             {
                 error_code = 0;
                 status_code = 0;
-                system("cls"); // clearing terminal screen in windows
+                std::system("cls"); // clearing terminal screen in windows
             }
             else if (OS == lnx) // from os.h
             {
                 error_code = 0;
                 status_code = 0;
-                system("clear"); // clearing terminal screen in linux
+                std::system("clear"); // clearing terminal screen in linux
             }
             else
             {
@@ -158,9 +203,9 @@ int main()
 
                 if(config::unknown_os_allowed == true){
                     if(config::shell == "bash" || config::shell == "sh" || config::shell == "zsh" || config::shell == "fish"){
-                        system("clear");
+                        std::system("clear");
                     } else if (config::shell == "batch"){
-                        system("cls");
+                        std::system("cls");
                     }
                 } else {
 
@@ -211,9 +256,15 @@ int main()
         }
         else
         {
-            error_code = 2;
-            status_code = 1;
-            std::cerr << "ERROR 002" << std::endl;
+            if(config::auto_exec){
+                system((config::shell + input + arg1).c_str());
+            }
+            else{
+                error_code = 2;
+                status_code = 1;
+                std::cerr << "ERROR 002" << std::endl;
+            }
+            
         }
         
         if (log){
