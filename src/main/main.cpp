@@ -257,7 +257,7 @@ int main()
         else
         {
             if(config::auto_exec){
-                system((config::shell + input + arg1).c_str());
+                system((input + arg1).c_str());
             }
             else{
                 error_code = 2;
