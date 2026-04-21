@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS := -c
-OBJ_FILES := main.o os.o vars.o log.o readconf.o configvars.o pluginloader.o
+OBJ_FILES := main.o os.o vars.o log.o readconf.o configvars.o pluginloader.o prompt.o
 
 libreterminal: $(OBJ_FILES)
 	@echo "Linking and building 'libreterminal' binary"
@@ -33,6 +33,9 @@ lt-plugin.o: src/main/lt-plugin.cpp
 
 pluginloader.o: src/main/pluginloader.cpp
 	$(CXX) $(CXXFLAGS) src/main/pluginloader.cpp
+
+prompt.o: src/main/prompt.cpp
+	$(CXX) $(CXXFLAGS) src/main/prompt.cpp
 
 clean:
 	@echo "Removing object files"

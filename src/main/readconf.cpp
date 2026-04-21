@@ -102,6 +102,12 @@ void readconf::read_config()
                 if(value_true){
                     config::auto_exec = true;
                 }
+            } else if (key == "custom_prompt"){
+                if(value_true){
+                    config::custom_prompt = true;
+                }
+            } else if (key == "custom_prompt_string"){
+                config::custom_prompt_string = value;
             }
             else if (key == "debug_mode"){
                 if(value_true){

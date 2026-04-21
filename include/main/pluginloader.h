@@ -6,9 +6,8 @@
 #include <optional>
 
 namespace pluginloader {
-    std::vector <std::string> locate_plugins();
-    void load_plugin_symbol(std::vector<std::string> plugins, std::string smybol, std::optional<const char*> var);
-    
+    extern std::vector <std::string> locate_plugins();
+    extern void load_plugin_symbol(std::vector<std::string> plugins, std::string smybol, std::optional<const char*> var);
 }
 
 #endif  

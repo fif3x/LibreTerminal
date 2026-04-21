@@ -45,6 +45,7 @@ E-MAIL: fif3x@disroot.org     NOTE: might not respond quickly, also this e-mail 
 #include "../../include/main/configvars.h"
 #include "../../include/main/pluginloader.h"
 #include "../../include/main/debug.hpp"
+#include "../../include/main/prompt.h"
 
 #define LOG log = true
 #define DEBUG config::debug_mode
@@ -93,7 +94,7 @@ int main()
         arg1 = { }; // std::string
         
         pl::load_plugin_symbol(plugins, "before_prompt", {});
-        print_os(); // from os.h
+        prompt();
         pl::load_plugin_symbol(plugins, "after_prompt", {});
 
         std::getline(std::cin, input); // capture full line, this helps so we can check if the line is empty
@@ -253,6 +254,12 @@ int main()
             }
             
             std::cout << "Detected: " << os << " | Code: " << OS << std::endl;
+        } else if (input == "echo" || input == "Echo"){
+            LOG;
+            error_code = 0;
+            status_code = 0;
+
+            system((input + arg1).c_str());
         }
         else
         {

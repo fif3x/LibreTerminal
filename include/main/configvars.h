@@ -4,6 +4,8 @@ namespace config{
     // --- general configs ---
     extern std::string shell;
     extern bool auto_exec;
+    extern bool custom_prompt;
+    extern std::string custom_prompt_string;
 
     extern bool debug_mode;
     extern bool show_mem; // show the memory used
