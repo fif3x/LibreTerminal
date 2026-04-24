@@ -1,4 +1,4 @@
-#include "../../include/main/pluginloader.h"
+#include "../../../include/main/pluginloader.h"
 
 #include <iostream>
 #include <string>

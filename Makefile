@@ -1,6 +1,7 @@
 CXX = g++
 CXXFLAGS := -c
 OBJ_FILES := main.o os.o vars.o log.o readconf.o configvars.o pluginloader.o prompt.o
+SRC_FOLDER = src/main/
 
 libreterminal: $(OBJ_FILES)
 	@echo "Linking and building 'libreterminal' binary"
@@ -10,32 +11,32 @@ lt-plugin: lt-plugin.o
 	@echo "Linking and building 'lt-plugin' binary"
 	$(CXX) lt-plugin.o -o lt-plugin
 
-main.o: src/main/main.cpp
-	$(CXX) $(CXXFLAGS) src/main/main.cpp
+main.o: $(SRC_FOLDER)main.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_FOLDER)main.cpp
 
-os.o: src/main/os.cpp
-	$(CXX) $(CXXFLAGS) src/main/os.cpp
+os.o: $(SRC_FOLDER)os.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_FOLDER)os.cpp
 
-vars.o: src/main/vars.cpp
-	$(CXX) $(CXXFLAGS) src/main/vars.cpp
+vars.o: $(SRC_FOLDER)vars.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_FOLDER)vars.cpp
 
-log.o: src/main/log.cpp
-	$(CXX) $(CXXFLAGS) src/main/log.cpp
+log.o: $(SRC_FOLDER)log.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_FOLDER)log.cpp
 
-readconf.o: src/main/readconf.cpp
-	$(CXX) $(CXXFLAGS) src/main/readconf.cpp
+readconf.o: $(SRC_FOLDER)readconf.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_FOLDER)readconf.cpp
 
-configvars.o: src/main/configvars.cpp
-	$(CXX) $(CXXFLAGS) src/main/configvars.cpp
+configvars.o: $(SRC_FOLDER)configvars.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_FOLDER)configvars.cpp
 
-lt-plugin.o: src/main/lt-plugin.cpp
-	$(CXX) $(CXXFLAGS) src/main/lt-plugin.cpp
+lt-plugin.o: $(SRC_FOLDER)plugin_sys/lt-plugin.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_FOLDER)plugin_sys/lt-plugin.cpp
 
-pluginloader.o: src/main/pluginloader.cpp
-	$(CXX) $(CXXFLAGS) src/main/pluginloader.cpp
+pluginloader.o: $(SRC_FOLDER)plugin_sys/pluginloader.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_FOLDER)plugin_sys/pluginloader.cpp
 
-prompt.o: src/main/prompt.cpp
-	$(CXX) $(CXXFLAGS) src/main/prompt.cpp
+prompt.o: $(SRC_FOLDER)prompt.cpp
+	$(CXX) $(CXXFLAGS) $(SRC_FOLDER)prompt.cpp
 
 clean:
 	@echo "Removing object files"

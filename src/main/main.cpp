@@ -35,8 +35,11 @@ E-MAIL: fif3x@disroot.org     NOTE: might not respond quickly, also this e-mail 
 
 #include <iostream>
 #include <cstdint>
+#include <filesystem>
+#include <algorithm>
 
 #include <string.h>
+#include <unistd.h> 
 
 #include "../../include/main/log.h"
 #include "../../include/main/os.h"
@@ -53,6 +56,7 @@ E-MAIL: fif3x@disroot.org     NOTE: might not respond quickly, also this e-mail 
 int main()
 {
     namespace pl = pluginloader;
+    namespace fs = std::filesystem;
     
     readconf::read_config(); // from readconf.h
 
@@ -104,16 +108,18 @@ int main()
         
         auto it = input.find(' ');
         if (it != std::string::npos) {
-            arg1 = input.substr(it);
+            arg1 = input.substr(it + 1);
             input = input.substr(0, it);           
         }
+
+        std::transform(input.begin(), input.end(), input.begin(), ::tolower);
         
         if(DEBUG){
             dbg(input, "input");
             dbg(arg1, "arg1");
         }
 
-        if (input == "quit" || input == "exit" || input == "Quit" || input == "Exit")
+        if (input == "quit" || input == "exit")
         {
             LOG;
             status_code = 0;
@@ -121,7 +127,7 @@ int main()
 
             break; // quit libre terminal
         } 
-        else if (input == "exec" || input == "Exec" || input == "execute")
+        else if (input == "exec" || input == "execute")
         {
             LOG;
             status_code = 0;
@@ -133,7 +139,77 @@ int main()
 
             std::system((arg1).c_str());
         }
-        else if (input == "ping" || input == "Ping")
+        else if (input == "cd"){
+            LOG;
+            status_code = 0;
+            error_code = 0;
+            
+            if(arg1.empty()){
+
+                std::string home = { };
+
+                if(OS == lnx){
+
+                    const char* env = std::getenv("HOME");
+                    if(env){
+                        home = env;
+                    }
+
+                } else if(OS == win){
+
+                    const char* env = std::getenv("USERPROFILE");
+                    if(env){
+                        home = env;
+                    }
+
+                    if(home.empty()){
+                        const char* drive = std::getenv("HOMEDRIVE");
+                        const char* path = std::getenv("HOMEPATH");
+
+                        if(drive && path){
+                            home = std::string(drive) + path;
+                        }
+                    }
+                    
+                }
+
+                std::error_code ec;
+                if(!home.empty()){
+                    fs::current_path(home, ec);
+                }
+
+                if(ec){
+                    std::cout << "cd error: " << ec.message() << std::endl;
+
+                    status_code = 1;
+                    error_code = 1;
+                }
+
+
+            } else {
+                if(fs::is_directory(arg1)){
+                    fs::current_path(arg1);
+                } else {
+                    status_code = 1;
+                    error_code = 6;
+
+                    std::cout << "Directory does not exist" << std::endl;
+                }
+            }
+            
+
+        }
+        else if (input == "pwd" || input == "show_directory" || input == "show_dir"){
+            LOG;
+            status_code = 0;
+            error_code = 0;
+
+            
+
+            std::cout << fs::current_path() << std::endl;
+
+        }
+        else if (input == "ping")
         {
             LOG;
             status_code = 0;
@@ -153,7 +229,7 @@ int main()
                 std::system("ipconfig");
             }
         }
-        else if (input == "help" || input == "Help")
+        else if (input == "help")
         {
             std::cout << "LIST OF COMMANDS\n" <<
                 "1. quit | exit - exits program\n" <<
@@ -181,7 +257,7 @@ int main()
         
         }
 
-        else if (input == "clear" || input == "cls" || input == "Clear" || input == "CLS" || input == "CLEAR")
+        else if (input == "clear" || input == "cls")
         { 
             LOG;
             // clear screen
@@ -212,14 +288,14 @@ int main()
 
                 }
             }
-        } else if (input == "show_shell" || input == "show_Shell"){
+        } else if (input == "show_shell"){
             LOG;
             error_code = 0;
             status_code = 0;
 
             std::cout << config::shell << std::endl;
 
-        } else if (input == "show_conf" || input == "show_Conf" || input == "show_config" || input == "show_Config"){
+        } else if (input == "show_conf" || input == "show_config"){
             LOG;
             error_code = 0;
             status_code = 0;
@@ -228,7 +304,7 @@ int main()
                 std::cout << readconf::configs.at(index) << std::endl;
             }
         }
-        else if (input == "logs" || input == "Logs" || input == "LOGS"){
+        else if (input == "logs"){
             LOG;
             error_code = 0;
             status_code = 0;
@@ -254,12 +330,42 @@ int main()
             }
             
             std::cout << "Detected: " << os << " | Code: " << OS << std::endl;
-        } else if (input == "echo" || input == "Echo"){
+        } else if (input == "echo"){
             LOG;
             error_code = 0;
             status_code = 0;
 
             system((input + arg1).c_str());
+        }
+        else if (input == "pkg"){
+            LOG;
+            error_code = 0;
+            status_code = 0;
+
+            if(!(OS == lnx)){
+                error_code = 1;
+                status_code = 7;
+                std::cout << "Cannot use command pkg: Requires using Linux + being on the available distro list" << std::endl;
+            } else {
+                std::transform(config::linux_distro.begin(), config::linux_distro.end(), config::linux_distro.begin(), ::tolower);
+
+
+                #define distro config::linux_distro
+
+                if(distro == "debian" || distro == "ubuntu" || distro == "mint" || distro == "popos"){
+                    std::system(("apt" + ' ' + arg1).c_str());
+                } else if (distro == "fedora" || distro == "centos" || distro == "rocky"){
+                    std::system(("dnf" + ' ' + arg1).c_str());
+                } else {
+                    error_code = 1;
+                    status_code = 7;
+
+                    std::cout << "Distro not available on the list; If its Arch, you need to parse it using 'exec', if its not, put a distro that uses the same package manager (e.g. fedora for dnf)" << std::endl;
+                }
+
+                #undef distro
+            }
+
         }
         else
         {
