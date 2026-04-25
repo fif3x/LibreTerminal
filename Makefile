@@ -3,6 +3,12 @@ CXXFLAGS := -c
 OBJ_FILES := main.o os.o vars.o log.o readconf.o configvars.o pluginloader.o prompt.o
 SRC_FOLDER = src/main/
 
+ifeq ($(OS),Windows_NT)
+    RM = del /Q
+else
+    RM = rm -f
+endif
+
 libreterminal: $(OBJ_FILES)
 	@echo "Linking and building 'libreterminal' binary"
 	$(CXX) $(OBJ_FILES) -o libreterminal
@@ -40,4 +46,4 @@ prompt.o: $(SRC_FOLDER)prompt.cpp
 
 clean:
 	@echo "Removing object files"
-	rm $(OBJ_FILES) lt-plugin.o
+	$(RM) *.o
