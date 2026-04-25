@@ -12,7 +12,8 @@ move libreterminal.exe bin
 move lt-plugin.exe bin
 make clean
 
-mkdir "%APPDATA%\libreterminal" && copy etc\config.conf %APPDATA%\libreterminal
+mkdir "%APPDATA%\libreterminal" && mkdir "%APPDATA%"\libreterminal\plugins
+copy etc\config.conf %APPDATA%\libreterminal
 
 cd bin
 libreterminal
