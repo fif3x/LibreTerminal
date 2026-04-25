@@ -29,10 +29,8 @@ echo "No Package manager detected - Assuming you have the dependencies preinstal
 fi
 
 git clone https://github.com/fif3x/LibreTerminal.git
-mkdir -p ~/.config/libreterminal
 
 cd LibreTerminal
-cp etc/config.conf ~/.config/libreterminal/
 
 cd build
 chmod +x build.sh
