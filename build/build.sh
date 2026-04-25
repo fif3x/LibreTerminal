@@ -10,7 +10,8 @@ mv libreterminal bin
 mv lt-plugin bin
 make clean
 
-mkdir -p ~/.config/libreterminal && cp ./etc/config.conf ~/.config/libreterminal/config.conf
+mkdir -p ~/.config/libreterminal && mkdir -p ~/.config/libreterminal/plugins
+cp ./etc/config.conf ~/.config/libreterminal/config.conf
 
 
 if sudo -v 2>/dev/null; then
