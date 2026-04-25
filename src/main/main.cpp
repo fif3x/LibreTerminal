@@ -108,7 +108,7 @@ int main()
         
         auto it = input.find(' ');
         if (it != std::string::npos) {
-            arg1 = input.substr(it + 1);
+            arg1 = input.substr(it);
             input = input.substr(0, it);           
         }
 
