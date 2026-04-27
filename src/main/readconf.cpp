@@ -53,7 +53,7 @@ void readconf::read_config()
     }
     else if (OS == win)
     {
-        path = fs::path("C:\\LibreTerminal\\config.conf");
+        path = fs::path(std::getenv("APPDATA")) / "libreterminal/config.conf";
         Log::log("Windows Detected on configuration", false);
     }
     else

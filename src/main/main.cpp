@@ -123,11 +123,6 @@ int main()
 
         pl::load_plugin_symbol(plugins, "input", input.c_str());
 
-        if(DEBUG){
-            dbg(input, "input");
-            dbg(arg1, "arg1");
-        }
-
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
         
         if(DEBUG){
