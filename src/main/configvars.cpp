@@ -4,8 +4,13 @@
 // --- general configs ---
 std::string config::shell = { };
 bool config::auto_exec = false;
+
+
+// --- prompt configs ---
 bool config::custom_prompt = false;
 std::string config::custom_prompt_string = { };
+bool config::show_path = false;
+bool config::user_name = false;
 
 bool config::debug_mode = false;
 bool config::show_mem = false;

@@ -108,8 +108,11 @@ void readconf::read_config()
                 }
             } else if (key == "custom_prompt_string"){
                 config::custom_prompt_string = value;
-            }
-            else if (key == "debug_mode"){
+            } else if (key == "show_path"){
+                if(value_true) config::show_path = true;
+            } else if (key == "user_name"){
+                if(value_true) config::user_name = true;
+            } else if (key == "debug_mode"){
                 if(value_true){
                     config::debug_mode = true;
                 }

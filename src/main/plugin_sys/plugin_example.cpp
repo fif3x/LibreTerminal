@@ -23,6 +23,10 @@ PLUGIN_EXPORT void after_prompt(){
     std::cout << " LION:";
 }
 
+PLUGIN_EXPORT void raw_input(const char* input){
+    
+}
+
 PLUGIN_EXPORT void input(const char* input){
     std::cout << "input plugin example. input and LION will be displayed " << input << " LION" << std::endl;
 }

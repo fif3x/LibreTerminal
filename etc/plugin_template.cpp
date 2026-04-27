@@ -23,6 +23,10 @@ PLUGIN_EXPORT void after_prompt(){
     // here what is done after the prompt
 }
 
+PLUGIN_EXPORT void raw_input(const char* raw){
+    // here what is done with the raw input
+}
+
 PLUGIN_EXPORT void input(const char* input){ // remember that `input` is a type of const char*, not std::string
     // here what is done with the input from the user
 }

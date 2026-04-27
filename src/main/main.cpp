@@ -97,19 +97,35 @@ int main()
         
         arg1 = { }; // std::string
         
-        pl::load_plugin_symbol(plugins, "before_prompt", {});
+        pl::load_plugin_symbol(plugins, "before_prompt", {}); // no need to recheck if config::apply_plugins is true, because if its not, 'plugins' will remain empty, therefore, no plugins to cycle through.
         prompt();
         pl::load_plugin_symbol(plugins, "after_prompt", {});
 
-        std::getline(std::cin, input); // capture full line, this helps so we can check if the line is empty
+        std::getline(std::cin, raw_input); // capture full line, this helps so we can check if the line is empty
+
+        pl::load_plugin_symbol(plugins, "raw_input", raw_input.c_str());
+
+        if(DEBUG){
+            dbg(raw_input, "raw_input");
+        }
+
+        auto it = raw_input.find(' ');
+        if (it != std::string::npos) {
+            input = raw_input.substr(0, it);
+            if(input == "cd"){
+                arg1 = raw_input.substr(it + 1);
+            } else {
+                arg1 = raw_input.substr(it);
+            }
+        } else {
+            input = raw_input;
+        }
 
         pl::load_plugin_symbol(plugins, "input", input.c_str());
 
-        
-        auto it = input.find(' ');
-        if (it != std::string::npos) {
-            arg1 = input.substr(it + 1);
-            input = input.substr(0, it);           
+        if(DEBUG){
+            dbg(input, "input");
+            dbg(arg1, "arg1");
         }
 
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
@@ -353,9 +369,9 @@ int main()
                 #define distro config::linux_distro
 
                 if(distro == "debian" || distro == "ubuntu" || distro == "mint" || distro == "popos"){
-                    std::system(("apt" + ' ' + arg1).c_str());
+                    std::system((std::string("apt") + " " + arg1).c_str());
                 } else if (distro == "fedora" || distro == "centos" || distro == "rocky"){
-                    std::system(("dnf" + ' ' + arg1).c_str());
+                    std::system((std::string("dnf") + " " + arg1).c_str());
                 } else {
                     error_code = 1;
                     status_code = 7;
@@ -366,6 +382,10 @@ int main()
                 #undef distro
             }
 
+        } else if (input == "pr"){
+            system(Log::logs.back().c_str());
+        } else if (input == "dir"){
+            system(input.c_str());
         }
         else
         {

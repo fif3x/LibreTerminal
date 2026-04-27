@@ -183,6 +183,30 @@ void pl::load_plugin_symbol(std::vector<std::string> plugins, std::string symbol
 
             CLOSE_FUNC;
 
+        } else if (symbol == "raw_input"){
+            void (*raw_input)(const char*);
+
+            if(!handle){
+                fputs(ERROR_MSG, stderr);
+                exit(1);
+            }
+
+            raw_input = reinterpret_cast<void (*)(const char*)>(SYMBOL_FUNC);
+
+            if((error = ERROR_MSG) != NULL){
+                fputs(error, stderr);
+                exit(1);
+            }
+
+            raw_input(var.value_or("N/A"));
+
+            if(!raw_input){
+                std::cerr << "ERROR: Symbol" << symbol << "does not exist in " << plugins.at(index);
+                return;
+            }
+
+            CLOSE_FUNC;
+
         } else {
             std::cout << "UNKNOWN SYMBOL: " << symbol << std::endl;
         }
