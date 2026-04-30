@@ -5,6 +5,7 @@
 #include <iostream>
 #include <filesystem>
 #include <map>
+#include <algorithm>
 
 #include "../../include/main/readconf.h"
 #include "../../include/main/vars.h"
@@ -99,53 +100,61 @@ void readconf::read_config()
                 config::shell = value;
             } 
             else if (key == "auto_exec"){
-                if(value_true){
-                    config::auto_exec = true;
-                }
+
+                if(value_true) config::auto_exec = true;
+                
             } else if (key == "custom_prompt"){
-                if(value_true){
-                    config::custom_prompt = true;
-                }
+
+                if(value_true) config::custom_prompt = true;
+                    
             } else if (key == "custom_prompt_string"){
+
                 config::custom_prompt_string = value;
+
             } else if (key == "show_path"){
-                if(value_true) config::show_path = true;
+
+                std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+                config::show_path = value;
+
             } else if (key == "user_name"){
+
                 if(value_true) config::user_name = true;
+
+            } else if (key == "bash_like_prompt"){
+
+                if(value_true) config::bash_like_prompt = true;
+
             } else if (key == "debug_mode"){
-                if(value_true){
-                    config::debug_mode = true;
-                }
+
+                if(value_true) config::debug_mode = true;
+                
             } else if (key == "show_mem"){
-                if(value_true){
-                    config::show_mem = true;
-                }
+
+                if(value_true) config::show_mem = true;
+                
             } else if (key == "unknown_os_allowed"){
-                if(value_true){
-                    config::unknown_os_allowed = true;
-                }
+
+                if(value_true) config::unknown_os_allowed = true;
+                
             } else if (key == "win_always"){
-                if(value_true){
-                    config::win_always = true;
-                }
+
+                if(value_true) config::win_always = true;
+                
             } else if (key == "linux_always"){
-                if(value_true){
-                    config::linux_always = true;
-                }
+                if(value_true) config::linux_always = true;
+                
             } else if (key == "linux_distro"){
                 config::linux_distro = value;
             } else if (key == "distro_not_os"){
-                if(value_true){
-                    config::distro_not_os = true;
-                }
+
+                if(value_true) config::distro_not_os = true;
+                
             } else if (key == "full_name_OS"){
-                if(value_true){
-                    config::full_name_OS = true;
-                }
+                if(value_true) config::full_name_OS = true;
+                
             } else if (key == "apply_plugins"){
-                if(value_true){
-                    config::apply_plugins = true;
-                }
+                if(value_true) config::apply_plugins = true;
+                
             } else {
                 Log::log(("Unknown Configuration Key: " + key), true);
             }

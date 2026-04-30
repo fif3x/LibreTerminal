@@ -8,8 +8,9 @@ namespace config{
     // --- prompt configs ---
     extern bool custom_prompt;
     extern std::string custom_prompt_string;
-    extern bool show_path;
+    extern std::string show_path;
     extern bool user_name;
+    extern bool bash_like_prompt;
 
     extern bool debug_mode;
     extern bool show_mem; // show the memory used

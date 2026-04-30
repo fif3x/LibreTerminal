@@ -39,7 +39,7 @@ E-MAIL: fif3x@disroot.org     NOTE: might not respond quickly, also this e-mail 
 #include <algorithm>
 
 #include <string.h>
-#include <unistd.h> 
+#include <unistd.h>
 
 #include "../../include/main/log.h"
 #include "../../include/main/os.h"
@@ -108,6 +108,9 @@ int main()
         if(DEBUG){
             dbg(raw_input, "raw_input");
         }
+
+        raw_input.erase(0, raw_input.find_first_not_of(" \t")); // start
+        raw_input.erase(raw_input.find_last_not_of(" \t") + 1); // end
 
         auto it = raw_input.find(' ');
         if (it != std::string::npos) {
