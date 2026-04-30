@@ -4,6 +4,8 @@
 // --- general configs ---
 std::string config::shell = { };
 bool config::auto_exec = false;
+bool config::keep_arg_on_logs = false;
+bool config::save_logs_to_file = false;
 
 
 // --- prompt configs ---
@@ -12,6 +14,7 @@ std::string config::custom_prompt_string = { };
 std::string config::show_path = { "false" };
 bool config::user_name = false;
 bool config::bash_like_prompt = false;
+bool config::full_name_OS = false;
 
 bool config::debug_mode = false;
 bool config::show_mem = false;
@@ -23,9 +26,6 @@ bool config::linux_always = false;
 bool config::distro_not_os = false;
 
 std::string config::linux_distro = { };
-
-// --- Printing-related configs ---
-bool config::full_name_OS = false;
 
 // --- plugins configs ---
 bool config::apply_plugins = false;

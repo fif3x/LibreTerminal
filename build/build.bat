@@ -15,6 +15,8 @@ make clean
 mkdir "%APPDATA%\libreterminal" && mkdir "%APPDATA%"\libreterminal\plugins
 copy etc\config.conf %APPDATA%\libreterminal
 
+type nul > %APPDATA%\libreterminal\logs.log
+
 cd bin
 libreterminal
 

@@ -94,3 +94,25 @@ std::string get_hostname(){
     #endif
 
 }
+
+std::string get_log_path(){
+    #ifdef _WIN32 || defined(_WIN64)
+    const char* appdata = std::getenv("APPDATA");
+    if(!appdata){
+        std::cerr << "Error with getting appdata on function get_log_path, fatal issue";
+        exit(1);
+    }
+    return std::string(appdata) + "\\libreterminal\\logs.log";
+    #elif defined(__linux__)
+    const char* home = std::getenv("HOME");
+    if(!home){
+        std::cerr << "Error with getting home on function get_log_path, fattal issue";
+        exit(1);
+    }
+    return std::string(home) + "/.config/libreterminal/logs.log";
+
+    #else
+    std::cerr << "FATAL: OS not allowed";
+    exit(1);
+    #endif
+}

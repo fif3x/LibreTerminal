@@ -399,7 +399,11 @@ int main()
         }
         
         if (log){
-            Log::log(input, false);
+            if(config::keep_arg_on_logs){
+                Log::log(input + arg1, false);
+            } else {
+                Log::log(input, false);
+            }
         }    
     }
 

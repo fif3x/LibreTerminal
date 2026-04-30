@@ -103,6 +103,14 @@ void readconf::read_config()
 
                 if(value_true) config::auto_exec = true;
                 
+            } else if (key == "keep_arg_on_logs"){
+                
+                if(value_true) config::keep_arg_on_logs = true;
+
+            } else if (key == "save_logs_to_file"){
+
+                if(value_true) config::save_logs_to_file = true;  
+                
             } else if (key == "custom_prompt"){
 
                 if(value_true) config::custom_prompt = true;
@@ -162,8 +170,8 @@ void readconf::read_config()
         
         Log::log("About to read from configuration", false);
             
-        for(int index = 0; index < readconf::configs.size(); index++){
-            Log::log(readconf::configs.at(index), false);
+        for(int i = 0; i < Log::logs.size(); i++){
+            Log::log(configs.at(i), false);
         }
         
         Log::log("Stopped reading from configuration", false);

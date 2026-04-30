@@ -36,5 +36,6 @@ inline os detect_os()
 extern void print_os();
 extern std::string get_username();
 extern std::string get_hostname();
+extern std::string get_log_path();
 
 #endif

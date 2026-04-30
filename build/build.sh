@@ -12,6 +12,7 @@ make clean
 
 mkdir -p ~/.config/libreterminal && mkdir -p ~/.config/libreterminal/plugins
 cp ./etc/config.conf ~/.config/libreterminal/config.conf
+touch ~/.config/libreterminal/logs.log
 
 
 if sudo -v 2>/dev/null; then
