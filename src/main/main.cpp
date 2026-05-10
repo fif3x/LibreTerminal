@@ -231,7 +231,7 @@ int main()
 
             std::system(("ping" + arg1).c_str());
         }
-        else if (input == "show_ip")
+        else if (input == "show_ip" || input == "showip")
         {
             LOG;
             status_code = 0;
@@ -245,19 +245,24 @@ int main()
         }
         else if (input == "help")
         {
-            std::cout << "LIST OF COMMANDS\n" <<
-                "1. quit | exit - exits program\n" <<
-                "2. help - shows list of commands\n" <<
-                "3. clear - clears output/screen\n" <<
-                "4. logs - shows logs\n" <<
-                "5. show_os - Shows OS being used\n" <<
-                "6. exec - executes the command given in the argument\n" <<
-                "7. show_ip - shows ip\n" <<
-                "8. ping - pings an ip given at [arg1]\n" <<
-                "9. show_shell - show shell detected\n" <<
-                "10. exec - executes command given at [arg1]\n" <<
-                "11. show_conf - shows configuration\n" << 
-                "12. echo - outputs what is given on [arg1]\n" <<
+            std::cout << "LIST OF COMMANDS (NOTE; COMMANDS ARE NOT CASE SENSITIVE)\n" <<
+                "1. quit/exit - exits program\n" <<
+                "2. exec/execute [arg1] - executes command given on arg1\n" <<
+                "3. cd [arg1] - changes directory to folder given on arg1\n" <<
+                "4. pwd/show_directory/show_dir - shows directory currently in\n" <<
+                "5. ping [arg1] - pings IP given on arg1\n" <<
+                "6. show_ip/showip - shows ip and general IP configurations\n" <<
+                "7. help - displays this message\n" <<
+                "8. clear - clears screen\n" <<
+                "9. show_shell/showshell - shows shell detected\n" <<
+                "10. show_conf/showconf - shows configuration\n" <<
+                "11. logs - Displays all messages logged\n" <<
+                "12. show_os/showos - Shows OS detected\n" << 
+                "13. echo [arg1] - outputs what is given on arg1\n" <<
+                "14. pkg [arg1] - does operation, with argument and name that is given on arg1\n" <<
+                "15. pr - executs previous command\n" <<
+                "16. dir/show_dir/show_directory - shows files in the directory currently in\n" <<
+                "17. shell [arg1] - calls the shell configured with the argument given on arg1\n" << 
             std::endl;
 
             status_code = 0;
@@ -302,7 +307,7 @@ int main()
 
                 }
             }
-        } else if (input == "show_shell"){
+        } else if (input == "show_shell" || input == "showshell"){
             LOG;
             error_code = 0;
             status_code = 0;
@@ -382,9 +387,11 @@ int main()
 
         } else if (input == "pr"){
             system(Log::logs.back().c_str());
-        } else if (input == "dir"){
-            system(input.c_str());
-        }
+        } else if (input == "dir" || input == "show_directory" || input == "showdirectory"){
+            system(std::string(input + " " + arg1).c_str());
+        } else if (input == "shell"){
+            system((std::string(config::shell) + arg1).c_str());
+        }  
         else
         {
             if(config::auto_exec){

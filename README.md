@@ -29,9 +29,7 @@ curl https://raw.githubusercontent.com/fif3x/LibreTerminal/refs/heads/main/build
 git clone https://github.com/fif3x/LibreTerminal.git
 ```
 
-2. If you are a Linux/MacOS user skip this. For Windows users, copy the file named `config.conf` from the repository folder under the 'etc' subfolder to the location `C:\\LibreTerminal`
-
-3. Now change directory to the build folder, make the script executable (if needed) and run it
+2. Now change directory to the build folder, make the script executable (if needed) and run it
 For Windows:
 ```bat
 cd build
@@ -44,7 +42,7 @@ chmod +x *
 ./build.sh
 ```
 
-4. If it has been compiled succesfully, your program should be located in either `bin/linux` or `bin/win`
+3. If it has been compiled succesfully, your program should be located in either `bin/linux` or `bin/win`, and if you are on Linux and gave sudo permissions, your program should also be in `/usr/bin`
 
 # Licensing
 Free and Open Source Software (FOSS) program.

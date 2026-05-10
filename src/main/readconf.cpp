@@ -13,6 +13,8 @@
 #include "../../include/main/log.h"
 #include "../../include/main/configvars.h"
 
+#define DEBUG_BUILD false
+
 namespace fs = std::filesystem;
 
 bool readconf::is_comment(std::string str)
@@ -75,7 +77,11 @@ void readconf::read_config()
         Log::log("Path exists", true);
         
         if(!config_f){
-            std::cout << "test-error\n";
+            std::cerr << "Config file does not exist\n";
+        }
+
+        if(DEBUG_BUILD){
+            Log::log("Before reading config and pushing to `readconf::configs`", true);
         }
 
         while (std::getline(config_f, text))
@@ -91,9 +97,18 @@ void readconf::read_config()
             std::string value = { };
 
 
+            if(DEBUG_BUILD){
+                Log::log("Before splitting key and value", true);
+            }
+
             if (it != std::string::npos) {
                 key = readconf::configs.at(index).substr(0, it);
                 value = readconf::configs.at(index).substr(it + 1);
+            }
+
+            if(DEBUG_BUILD){
+                Log::log(std::string("`key`: " + key), true);
+                Log::log(std::string("`value`: " + value), true);
             }
 
             if(key == "shell"){
@@ -164,13 +179,13 @@ void readconf::read_config()
                 if(value_true) config::apply_plugins = true;
                 
             } else {
-                Log::log(("Unknown Configuration Key: " + key), true);
+                Log::log(std::string("Unknown Configuration Key: " + key), true);
             }
         }
         
         Log::log("About to read from configuration", false);
             
-        for(int i = 0; i < Log::logs.size(); i++){
+        for(int i = 0; i < readconf::configs.size(); i++){
             Log::log(configs.at(i), false);
         }
         
