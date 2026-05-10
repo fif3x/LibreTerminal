@@ -1,6 +1,8 @@
 #ifndef OS_H
 #define OS_H
 
+#include <string>
+
 #ifndef lnx
 #define lnx os::LINUX
 #endif
@@ -32,5 +34,8 @@ inline os detect_os()
 }
 
 extern void print_os();
+extern std::string get_username();
+extern std::string get_hostname();
+extern std::string get_log_path();
 
 #endif

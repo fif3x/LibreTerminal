@@ -5,3 +5,5 @@ This is a file  containing the error codes and meanings.
 003 - Config file does not exist. To resolve, either create a config file in ~/.config/libreterminal/ named "config.conf", or enable the minimum option and recompile the program
 004 - Config file is open
 005 - Unrecognized Operating System. Please check the repository for more info, or contact developer
+006 - Directory does not exist
+007 - Invalid Operation System. Something has happened and you are not allowed to use that feature do to the OS being used. This might also show up because of invalid Linux Distro

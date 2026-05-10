@@ -4,7 +4,9 @@
 #include <string>
 #include <cstdint>
 
+extern std::string raw_input;
 extern std::string input;
+extern std::string arg1;
 extern bool minimum;
 extern bool close_conf_before_reading;
 
