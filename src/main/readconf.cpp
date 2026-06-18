@@ -1,10 +1,8 @@
 #include <fstream>
 #include <string>
-#include <cstdint>
 #include <vector>
 #include <iostream>
 #include <filesystem>
-#include <map>
 #include <algorithm>
 
 #include "../../include/main/readconf.h"
@@ -35,7 +33,7 @@ void readconf::read_config()
 {
     os OS;
     OS = detect_os();
-    
+
     Log::log("Detected OS", true);
 
     fs::path path = { };
@@ -48,7 +46,7 @@ void readconf::read_config()
         Log::log("Minimum boolean set to true", true);
         return;
     }
- 
+
     if (OS == lnx)
     {
         path = fs::path(std::getenv("HOME")) / ".config/libreterminal/config.conf";
@@ -71,11 +69,11 @@ void readconf::read_config()
     std::fstream config_f(path);
 
     std::string text = { };
-    
+
     if (fs::exists(path))
     {
         Log::log("Path exists", true);
-        
+
         if(!config_f){
             std::cerr << "Config file does not exist\n";
         }
@@ -90,7 +88,7 @@ void readconf::read_config()
                 readconf::configs.push_back(text);
             }
         }
-        
+
         for (int index = 0; index < readconf::configs.size(); index++){
             auto it = readconf::configs.at(index).find('=');
             std::string key = { };
@@ -113,23 +111,23 @@ void readconf::read_config()
 
             if(key == "shell"){
                 config::shell = value;
-            } 
+            }
             else if (key == "auto_exec"){
 
                 if(value_true) config::auto_exec = true;
-                
+
             } else if (key == "keep_arg_on_logs"){
-                
+
                 if(value_true) config::keep_arg_on_logs = true;
 
             } else if (key == "save_logs_to_file"){
 
-                if(value_true) config::save_logs_to_file = true;  
-                
+                if(value_true) config::save_logs_to_file = true;
+
             } else if (key == "custom_prompt"){
 
                 if(value_true) config::custom_prompt = true;
-                    
+
             } else if (key == "custom_prompt_string"){
 
                 config::custom_prompt_string = value;
@@ -150,45 +148,45 @@ void readconf::read_config()
             } else if (key == "debug_mode"){
 
                 if(value_true) config::debug_mode = true;
-                
+
             } else if (key == "show_mem"){
 
                 if(value_true) config::show_mem = true;
-                
+
             } else if (key == "unknown_os_allowed"){
 
                 if(value_true) config::unknown_os_allowed = true;
-                
+
             } else if (key == "win_always"){
 
                 if(value_true) config::win_always = true;
-                
+
             } else if (key == "linux_always"){
                 if(value_true) config::linux_always = true;
-                
+
             } else if (key == "linux_distro"){
                 config::linux_distro = value;
             } else if (key == "distro_not_os"){
 
                 if(value_true) config::distro_not_os = true;
-                
+
             } else if (key == "full_name_OS"){
                 if(value_true) config::full_name_OS = true;
-                
+
             } else if (key == "apply_plugins"){
                 if(value_true) config::apply_plugins = true;
-                
+
             } else {
                 Log::log(std::string("Unknown Configuration Key: " + key), true);
             }
         }
-        
+
         Log::log("About to read from configuration", false);
-            
+
         for(int i = 0; i < readconf::configs.size(); i++){
             Log::log(configs.at(i), false);
         }
-        
+
         Log::log("Stopped reading from configuration", false);
     }
     else
