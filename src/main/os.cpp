@@ -18,9 +18,9 @@
 void print_os()
 {
     os OS = detect_os();
-    
+
     if (OS == os::WIN)
-    {   
+    {
         if(config::full_name_OS){
             std::cout << "Windows";
         }
@@ -40,7 +40,7 @@ void print_os()
 }
 
 std::string get_username(){
-    
+
     #if defined(_WIN32) || defined(_WIN64)
 
     char username[UNLEN + 1] = { };
@@ -51,7 +51,7 @@ std::string get_username(){
     } else {
         std::cerr << "ERROR: " << GetLastError() << std::endl;
         return "USER";
-    }   
+    }
 
     #elif defined(__linux__)
 
@@ -75,7 +75,7 @@ std::string get_hostname(){
     DWORD buf_char_count = sizeof(info_buf);
 
     if(!GetComputerNameA(info_buf, &buf_char_count)){
-        printError("GetComputerName"); 
+        printError("GetComputerName");
         return "HOSTNAME";
     }
 
@@ -83,7 +83,7 @@ std::string get_hostname(){
 
     #elif defined(__linux__)
     char hostname[HOST_NAME_MAX];
-    
+
     if(gethostname(hostname, HOST_NAME_MAX) != 0){
         return "HOSTNAME";
     }
@@ -96,7 +96,7 @@ std::string get_hostname(){
 }
 
 std::string get_log_path(){
-    #ifdef _WIN32 || defined(_WIN64)
+    #if defined(_WIN32) || defined(_WIN64)
     const char* appdata = std::getenv("APPDATA");
     if(!appdata){
         std::cerr << "Error with getting appdata on function get_log_path, fatal issue";

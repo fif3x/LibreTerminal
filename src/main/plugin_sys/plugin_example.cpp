@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 
 // g++ -shared -fPIC -o plugin_example.so plugin_example.cpp
 
@@ -24,7 +23,7 @@ PLUGIN_EXPORT void after_prompt(){
 }
 
 PLUGIN_EXPORT void raw_input(const char* input){
-    
+
 }
 
 PLUGIN_EXPORT void input(const char* input){

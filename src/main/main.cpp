@@ -34,12 +34,12 @@ E-MAIL: fif3x@disroot.org     NOTE: might not respond quickly, also this e-mail 
 */
 
 #include <iostream>
-#include <cstdint>
 #include <filesystem>
 #include <algorithm>
 
-#include <string.h>
+#if defined(__linux__)
 #include <unistd.h>
+#endif
 
 #include "../../include/main/log.h"
 #include "../../include/main/os.h"
@@ -57,7 +57,7 @@ int main()
 {
     namespace pl = pluginloader;
     namespace fs = std::filesystem;
-    
+
     readconf::read_config(); // from readconf.h
 
     std::vector<std::string> plugins = { };
@@ -90,13 +90,13 @@ int main()
         pl::load_plugin_symbol(plugins, "start", {});
 
     }
-    
+
     while (true)
     {
         bool log = false;
-        
+
         arg1 = { }; // std::string
-        
+
         pl::load_plugin_symbol(plugins, "before_prompt", {}); // no need to recheck if config::apply_plugins is true, because if its not, 'plugins' will remain empty, therefore, no plugins to cycle through.
         prompt();
         pl::load_plugin_symbol(plugins, "after_prompt", {});
@@ -127,7 +127,7 @@ int main()
         pl::load_plugin_symbol(plugins, "input", input.c_str());
 
         std::transform(input.begin(), input.end(), input.begin(), ::tolower);
-        
+
         if(DEBUG){
             dbg(input, "input");
             dbg(arg1, "arg1");
@@ -140,7 +140,7 @@ int main()
             error_code = 0;
 
             break; // quit libre terminal
-        } 
+        }
         else if (input == "exec" || input == "execute")
         {
             LOG;
@@ -157,7 +157,7 @@ int main()
             LOG;
             status_code = 0;
             error_code = 0;
-            
+
             if(arg1.empty()){
 
                 std::string home = { };
@@ -184,7 +184,7 @@ int main()
                             home = std::string(drive) + path;
                         }
                     }
-                    
+
                 }
 
                 std::error_code ec;
@@ -210,7 +210,7 @@ int main()
                     std::cout << "Directory does not exist" << std::endl;
                 }
             }
-            
+
 
         }
         else if (input == "pwd" || input == "show_directory" || input == "show_dir"){
@@ -218,7 +218,7 @@ int main()
             status_code = 0;
             error_code = 0;
 
-            
+
 
             std::cout << fs::current_path() << std::endl;
 
@@ -257,27 +257,27 @@ int main()
                 "9. show_shell/showshell - shows shell detected\n" <<
                 "10. show_conf/showconf - shows configuration\n" <<
                 "11. logs - Displays all messages logged\n" <<
-                "12. show_os/showos - Shows OS detected\n" << 
+                "12. show_os/showos - Shows OS detected\n" <<
                 "13. echo [arg1] - outputs what is given on arg1\n" <<
                 "14. pkg [arg1] - does operation, with argument and name that is given on arg1\n" <<
                 "15. pr - executs previous command\n" <<
                 "16. dir/show_dir/show_directory - shows files in the directory currently in\n" <<
-                "17. shell [arg1] - calls the shell configured with the argument given on arg1\n" << 
+                "17. shell [arg1] - calls the shell configured with the argument given on arg1\n" <<
             std::endl;
 
             status_code = 0;
             error_code = 0;
             LOG;
-            
+
             // get help
         }
         else if (input.empty() || (input.size() > 1 && input.at(1) == ' ') || input == "\n")
         { // so it doesnt look buggy
-        
+
         }
 
         else if (input == "clear" || input == "cls")
-        { 
+        {
             LOG;
             // clear screen
             if (OS == win)
@@ -337,9 +337,9 @@ int main()
             LOG;
             error_code = true;
             status_code = true;
-            
+
             std::string os = { };
-            
+
             if(OS == lnx){
                 os = "Linux";
             } else if (OS == win){
@@ -347,7 +347,7 @@ int main()
             } else if (OS == unk){
                 os = "Unknown";
             }
-            
+
             std::cout << "Detected: " << os << " | Code: " << OS << std::endl;
         } else if (input == "echo"){
             LOG;
@@ -391,7 +391,7 @@ int main()
             system(std::string(input + " " + arg1).c_str());
         } else if (input == "shell"){
             system((std::string(config::shell) + arg1).c_str());
-        }  
+        }
         else
         {
             if(config::auto_exec){
@@ -402,16 +402,16 @@ int main()
                 status_code = 1;
                 std::cerr << "ERROR 002" << std::endl;
             }
-            
+
         }
-        
+
         if (log){
             if(config::keep_arg_on_logs){
                 Log::log(input + arg1, false);
             } else {
                 Log::log(input, false);
             }
-        }    
+        }
     }
 
     // i use fedora btw
